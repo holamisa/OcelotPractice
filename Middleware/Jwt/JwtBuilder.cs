@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Middleware.Jwt
 {
-    public class JwtBuilder(IOptions<JwtOptions> options) : IJwtBuilder
+    public class JwtBuilder(IOptions<JwtOptionsDto> options) : IJwtBuilder
     {
-        private readonly JwtOptions _options = options.Value;
+        private readonly JwtOptionsDto _options = options.Value;
 
         public string GetToken(string userId)
         {

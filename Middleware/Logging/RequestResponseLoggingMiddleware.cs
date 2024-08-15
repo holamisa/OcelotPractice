@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using System.Text;
 
 namespace Middleware.Logging
@@ -10,14 +9,15 @@ namespace Middleware.Logging
         private readonly RequestDelegate _next;
         private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
 
-        public RequestResponseLoggingMiddleware(RequestDelegate next)
+        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger)
         {
             _next = next;
-            _logger = new LoggerFactory().CreateLogger<RequestResponseLoggingMiddleware>();
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.File("logs/requestresponse_log_.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
+            _logger = logger;
+        //    _logger = new LoggerFactory().CreateLogger<RequestResponseLoggingMiddleware>();
+        //    Log.Logger = new LoggerConfiguration()
+        //        .MinimumLevel.Information()
+        //        .WriteTo.File("logs/requestresponse_log_.txt", rollingInterval: RollingInterval.Day)
+        //        .CreateLogger();
         }
 
         public async Task InvokeAsync(HttpContext context)

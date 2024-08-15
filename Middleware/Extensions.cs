@@ -19,10 +19,10 @@ namespace Middleware
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var section = configuration.GetSection("Jwt");
-            var options = section.Get<JwtOptions>();
+            var options = section.Get<JwtOptionsDto>();
             var key = Encoding.UTF8.GetBytes(options.Secret);
             section.Bind(options);
-            services.Configure<JwtOptions>(section);
+            services.Configure<JwtOptionsDto>(section);
 
             services.AddSingleton<IJwtBuilder, JwtBuilder>();
             services.AddTransient<JwtMiddleware>();

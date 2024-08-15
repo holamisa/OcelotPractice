@@ -41,6 +41,8 @@ app.UseCors(x => x
 // Add the request and response logging middleware
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
+app.UseExceptionHandler((_ => { }));
+
 await app.UseOcelot();
 
 app.Run();
