@@ -27,6 +27,8 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
+app.UseExceptionHandler((_ => { }));
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -40,8 +42,6 @@ app.UseCors(x => x
 
 // Add the request and response logging middleware
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
-app.UseExceptionHandler((_ => { }));
 
 await app.UseOcelot();
 
