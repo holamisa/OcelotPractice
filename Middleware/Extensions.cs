@@ -14,6 +14,7 @@ namespace Middleware
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
         }
 
         public static void AddJwt(this IServiceCollection services, IConfiguration configuration)

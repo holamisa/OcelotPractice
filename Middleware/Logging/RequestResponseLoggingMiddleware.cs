@@ -13,20 +13,20 @@ namespace Middleware.Logging
         {
             _next = next;
             _logger = logger;
-        //    _logger = new LoggerFactory().CreateLogger<RequestResponseLoggingMiddleware>();
-        //    Log.Logger = new LoggerConfiguration()
-        //        .MinimumLevel.Information()
-        //        .WriteTo.File("logs/requestresponse_log_.txt", rollingInterval: RollingInterval.Day)
-        //        .CreateLogger();
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Log the request
-            await LogRequestAsync(context);
-
-            // Log the response
-            await LogResponseAsync(context);
+            try
+            {
+                await LogRequestAsync(context);
+                await _next(context);
+                await LogResponseAsync(context);
+            }
+            catch
+            {
+                throw; // Ensure the exception is rethrown
+            }
         }
 
         private async Task LogRequestAsync(HttpContext context)

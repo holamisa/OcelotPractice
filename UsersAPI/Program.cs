@@ -2,15 +2,30 @@ using UsersAPI.Helper;
 using Middleware;
 using Middleware.Logging;
 using Serilog;
+using UsersAPI.Infrastructures;
+using UsersAPI.Repositories;
+using Dapper;
+using UsersAPI.Services;
+using Middleware.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.RegisterServices(builder.Configuration);
 
+// Set Dapper's MatchNamesWithUnderscores to true globally
+DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+builder.Services.AddSingleton<DapperContext>(sp =>
+    new DapperContext(builder.Configuration));
+
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<UserService>();
+
 builder.Services.AddCors();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,7 +41,9 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
-app.UseExceptionHandler((_ => { }));
+app.UseExceptionHandler(_ => { });
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -40,8 +57,6 @@ app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
-
-app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseAuthorization();
 

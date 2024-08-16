@@ -29,7 +29,10 @@ namespace Middleware.Exceptions
 
             ProblemDetails result = GetProblemDetails(httpContext, exception);
 
-            await httpContext.Response.WriteAsJsonAsync(result, cancellationToken: cancellationToken);
+            httpContext.Response.StatusCode = result.Status ?? (int)HttpStatusCode.InternalServerError;
+            httpContext.Response.ContentType = "application/json";
+
+            await httpContext.Response.WriteAsJsonAsync(result, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return true;
         }
@@ -45,7 +48,7 @@ namespace Middleware.Exceptions
                 case NotFoundException notFoundException:
                     result = new ProblemDetails
                     {
-                        Status = (int)HttpStatusCode.Unauthorized,
+                        Status = (int)HttpStatusCode.NotFound,
                         Type = notFoundException.GetType().Name,
                         Title = "An unexpected error occurred",
                         Detail = _env.IsDevelopment() ? notFoundException.Message : null,
