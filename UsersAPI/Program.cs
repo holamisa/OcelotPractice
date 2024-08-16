@@ -1,20 +1,19 @@
-using MainGateway.Helper;
+using UsersAPI.Helper;
 using Middleware;
 using Middleware.Logging;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
 builder.Services.RegisterServices(builder.Configuration);
-builder.Services.AddJwt(builder.Configuration);
+
 builder.Services.AddCors();
 
-builder.Configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true);
-builder.Services.AddOcelot(builder.Configuration);
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Serilog ±¸¼º
 Log.Logger = new LoggerConfiguration()
@@ -29,11 +28,14 @@ var app = builder.Build();
 
 app.UseExceptionHandler((_ => { }));
 
-if (!app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
+// global cors policy
 app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
@@ -41,6 +43,8 @@ app.UseCors(x => x
 
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-await app.UseOcelot();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

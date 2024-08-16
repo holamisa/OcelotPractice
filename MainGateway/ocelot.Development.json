@@ -4,9 +4,9 @@
   },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/member",
+      "UpstreamPathTemplate": "/users/{id}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/member",
+      "DownstreamPathTemplate": "/api/users/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

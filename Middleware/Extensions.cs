@@ -14,7 +14,26 @@ namespace Middleware
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
-            services.AddJwtAuthentication(configuration);
+        }
+
+        public static void AddJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            var section = configuration.GetSection("Jwt");
+            var options = section.Get<JwtOptionsDto>();
+            section.Bind(options);
+            services.Configure<JwtOptionsDto>(section);
+            services.AddSingleton<IJwtBuilder, JwtBuilder>();
+            services.AddAuthentication()
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Secret))
+                    };
+                });
         }
 
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

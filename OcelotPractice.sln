@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "middlewares", "middlewares"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainGateway", "MainGateway\MainGateway.csproj", "{B5D95898-50A0-45DD-AEA0-E43DAF9FC38D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware", "Middleware\Middleware.csproj", "{35773442-9CCA-4977-882E-2B0B7AC14041}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware", "Middleware\Middleware.csproj", "{35773442-9CCA-4977-882E-2B0B7AC14041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersAPI", "UsersAPI\UsersAPI.csproj", "{5D1D1C70-467E-4628-85B2-9BCC12BD56F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{35773442-9CCA-4977-882E-2B0B7AC14041}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35773442-9CCA-4977-882E-2B0B7AC14041}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35773442-9CCA-4977-882E-2B0B7AC14041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D1D1C70-467E-4628-85B2-9BCC12BD56F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D1D1C70-467E-4628-85B2-9BCC12BD56F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D1D1C70-467E-4628-85B2-9BCC12BD56F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D1D1C70-467E-4628-85B2-9BCC12BD56F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B5D95898-50A0-45DD-AEA0-E43DAF9FC38D} = {3ECF0232-B80A-4DBE-A69A-AE2327F5AD0F}
 		{35773442-9CCA-4977-882E-2B0B7AC14041} = {680178C8-CF63-4848-B333-A505D60838EC}
+		{5D1D1C70-467E-4628-85B2-9BCC12BD56F6} = {CFD7F7CC-A4DF-4D10-A63E-52B63B89919B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C9752E4-CCAE-43B4-B247-8D9BF1447C15}
