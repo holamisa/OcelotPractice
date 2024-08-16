@@ -16,7 +16,7 @@ namespace UsersAPI.Services
 
         public async Task<UserModel?> GetUserById(int id)
         {
-            using (var unitOfWork = new UnitOfWork(_context, useTransaction: false))
+            using (var unitOfWork = new UnitOfWork(_context))
             {
                 UserModel? user = await unitOfWork.User.GetByIdAsync(id);
                 if (user is null)
@@ -28,16 +28,15 @@ namespace UsersAPI.Services
             }
         }
 
-        public async Task<int> AddUser()
+        public async Task<int> AddUser(UserModel user)
         {
             using (var unitOfWork = new UnitOfWork(_context, useTransaction: true))
             {
                 try
                 {
-                    var newUser = new UserModel { Name = "정봉재", Email = "bongjaejeong@naver.com", Password = "12341234" };
-                    await unitOfWork.User.AddAsync(newUser);
+                    await unitOfWork.User.AddAsync(user);
 
-                    var newCart = new CartModel { UserId = newUser.Id };
+                    var newCart = new CartModel { UserId = user.Id };
                     await unitOfWork.Cart.AddAsync(newCart);
 
                     return await unitOfWork.CommitAsync();
@@ -49,7 +48,5 @@ namespace UsersAPI.Services
                 }
             }
         }
-
-        
     }
 }

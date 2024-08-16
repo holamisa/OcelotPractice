@@ -6,7 +6,6 @@ using UsersAPI.Infrastructures;
 using UsersAPI.Repositories;
 using Dapper;
 using UsersAPI.Services;
-using Middleware.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,9 +40,9 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
-app.UseExceptionHandler(_ => { });
-
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
+app.UseExceptionHandler(_ => { });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,6 +56,8 @@ app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

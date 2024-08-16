@@ -41,74 +41,24 @@ namespace Middleware.Exceptions
             HttpContext httpContext,
             Exception exception)
         {
-            ProblemDetails result = new ProblemDetails();
-
-            switch (exception)
+            var statusCode = exception switch
             {
-                case NotFoundException notFoundException:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.NotFound,
-                        Type = notFoundException.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? notFoundException.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    };
-                    break;
-                case BadRequestException badRequestException:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.BadRequest,
-                        Type = badRequestException.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? badRequestException.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    };
-                    break;
-                case ValidationException validationException:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.BadRequest,
-                        Type = validationException.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? validationException.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    };
-                    break;
-                case ArgumentNullException argumentNullException:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.BadRequest,
-                        Type = argumentNullException.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? argumentNullException.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    };
-                    break;
-                case UnauthorizedException unauthorizedException:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.Unauthorized,
-                        Type = unauthorizedException.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? unauthorizedException.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    };
-                    break;
-                default:
-                    result = new ProblemDetails
-                    {
-                        Status = (int)HttpStatusCode.InternalServerError,
-                        Type = exception.GetType().Name,
-                        Title = "An unexpected error occurred",
-                        Detail = _env.IsDevelopment() ? exception.Message : null,
-                        Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
-                    };
-                    _logger.LogError(exception, $"Exception occured : {exception.Message}");
-                    break;
-            }
+                NotFoundException => (int)HttpStatusCode.NotFound,
+                BadRequestException or ValidationException or ArgumentNullException => (int)HttpStatusCode.BadRequest,
+                UnauthorizedException => (int)HttpStatusCode.Unauthorized,
+                _ => (int)HttpStatusCode.InternalServerError,
+            };
 
-            return result;
+            var problemDetails = new ProblemDetails
+            {
+                Status = statusCode,
+                Type = exception.GetType().Name,
+                Title = "An unexpected error occurred",
+                Detail = _env.IsDevelopment() ? exception.Message : null,
+                Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
+            };
+
+            return problemDetails;
         }
     }
 }
