@@ -28,5 +28,10 @@ namespace UsersAPI.Repositories.Cart
 
             return await _connection.ExecuteAsync(sql, cart, _transaction);
         }
+
+        public Task<int> UpdateByIdAsync(CartModel entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

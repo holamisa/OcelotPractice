@@ -28,5 +28,12 @@ namespace UsersAPI.Repositories.User
 
             return await _connection.ExecuteAsync(sql, user, _transaction);
         }
+
+        public async Task<int> UpdateByIdAsync(UserModel user)
+        {
+            var sql = "UPDATE TBL_USER ";
+
+            return await _connection.ExecuteAsync(sql, user, _transaction);
+        }
     }
 }

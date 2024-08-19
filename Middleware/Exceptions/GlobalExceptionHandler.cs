@@ -55,8 +55,13 @@ namespace Middleware.Exceptions
                 Type = exception.GetType().Name,
                 Title = "An unexpected error occurred",
                 Detail = _env.IsDevelopment() ? exception.Message : null,
-                Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
+                Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
             };
+
+            if (exception is BadRequestException badRequestException && badRequestException.Errors != null)
+            {
+                problemDetails.Extensions["errors"] = badRequestException.Errors;
+            }
 
             return problemDetails;
         }
