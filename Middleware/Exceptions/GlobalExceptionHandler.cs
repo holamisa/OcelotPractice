@@ -46,6 +46,7 @@ namespace Middleware.Exceptions
                 NotFoundException => (int)HttpStatusCode.NotFound,
                 BadRequestException or ValidationException or ArgumentNullException => (int)HttpStatusCode.BadRequest,
                 UnauthorizedException => (int)HttpStatusCode.Unauthorized,
+                ConflictException => (int)HttpStatusCode.Conflict,
                 _ => (int)HttpStatusCode.InternalServerError,
             };
 
@@ -61,6 +62,10 @@ namespace Middleware.Exceptions
             if (exception is BadRequestException badRequestException && badRequestException.Errors != null)
             {
                 problemDetails.Extensions["errors"] = badRequestException.Errors;
+            }
+            else if(exception is ValidationException validationException && validationException.Errors != null)
+            {
+                problemDetails.Extensions["errors"] = validationException.Errors;
             }
 
             return problemDetails;

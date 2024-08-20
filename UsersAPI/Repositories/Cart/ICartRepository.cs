@@ -2,5 +2,5 @@
 
 namespace UsersAPI.Repositories.Cart
 {
-    public interface ICartRepository : IGenericRepository<CartModel> { }
+    public interface ICartRepository : IGenericRepository<CartModel, CartModel> { }
 }

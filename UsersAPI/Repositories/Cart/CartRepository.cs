@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System.Data;
+﻿using System.Data;
 using UsersAPI.Models;
 
 namespace UsersAPI.Repositories.Cart
@@ -17,19 +16,20 @@ namespace UsersAPI.Repositories.Cart
 
         public async Task<CartModel?> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM TBL_CART WHERE Id = @Id";
-
-            return await _connection.QueryFirstOrDefaultAsync(sql);
+            throw new NotImplementedException();
         }
 
         public async Task<int> AddAsync(CartModel cart)
         {
-            var sql = "INSERT INTO TBL_CART (user_id) VALUES (@UserId)";
-
-            return await _connection.ExecuteAsync(sql, cart, _transaction);
+            throw new NotImplementedException();
         }
 
         public Task<int> UpdateByIdAsync(CartModel entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> DeleteByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
